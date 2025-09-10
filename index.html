@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Chatbot - AI Financial Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>💰 FinanceBot AI</h1>
+                </div>
+                <div class="user-info" id="userInfo">
+                    <span id="userGreeting">Welcome! Please set up your profile to get started.</span>
+                    <button class="btn btn--sm btn--outline" id="profileBtn">Setup Profile</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container main-container">
+        <div class="app-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Your Profile</h3>
+                    <div id="profileSummary" class="profile-summary">
+                        <p class="text-secondary">Complete your profile to receive personalized financial guidance.</p>
+                        <button class="btn btn--primary btn--sm" id="setupProfileBtn">Get Started</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn--secondary btn--sm btn--full-width" id="budgetSummaryBtn">📊 Budget Summary</button>
+                        <button class="btn btn--secondary btn--sm btn--full-width" id="spendingAnalysisBtn">📈 Analyze Spending</button>
+                        <button class="btn btn--secondary btn--sm btn--full-width" id="investmentAdviceBtn">💡 Investment Advice</button>
+                        <button class="btn btn--secondary btn--sm btn--full-width" id="savingsGoalBtn">🎯 Savings Goals</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Financial Overview</h3>
+                    <div id="financialMetrics" class="financial-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Monthly Income</span>
+                            <span class="metric-value" id="monthlyIncome">-</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Total Expenses</span>
+                            <span class="metric-value" id="totalExpenses">-</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Savings Rate</span>
+                            <span class="metric-value" id="savingsRate">-</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Chat Container -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2>💬 Financial Assistant Chat</h2>
+                        <button class="btn btn--sm btn--outline" id="clearChatBtn">Clear Chat</button>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant-message">
+                            <div class="message-content">
+                                <p>Hello! I'm your AI-powered personal finance assistant. I'm here to help you with budgeting, investments, savings, and all your financial questions.</p>
+                                <p>To provide you with personalized advice, please set up your profile first. I'll adapt my responses based on whether you're a student or a working professional.</p>
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input">
+                            <input type="text" id="messageInput" placeholder="Ask me anything about your finances..." class="form-control">
+                            <button class="btn btn--primary" id="sendBtn">Send</button>
+                        </div>
+                        <div class="suggested-questions">
+                            <button class="suggestion-btn" data-message="How can I create a budget?">How can I create a budget?</button>
+                            <button class="suggestion-btn" data-message="What's the best way to start investing?">What's the best way to start investing?</button>
+                            <button class="suggestion-btn" data-message="How much should I save for emergencies?">How much should I save for emergencies?</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Dashboard -->
+                <div class="dashboard-section">
+                    <h2>📊 Your Financial Dashboard</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Budget Breakdown</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="budgetChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Spending Trends</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="spendingChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insights-section">
+                        <h3>💡 Personalized Insights</h3>
+                        <div id="insightsContainer" class="insights-container">
+                            <p class="text-secondary">Complete your profile to receive personalized financial insights and recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Profile Setup Modal -->
+    <div class="modal hidden" id="profileModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👤 Set Up Your Financial Profile</h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label class="form-label" for="userName">What's your name?</label>
+                        <input type="text" id="userName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="userAge">Age</label>
+                        <input type="number" id="userAge" class="form-control" min="16" max="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="userOccupation">Current Occupation</label>
+                        <select id="userOccupation" class="form-control" required>
+                            <option value="">Select your occupation</option>
+                            <option value="student">Student (High School/College)</option>
+                            <option value="software_engineer">Software Engineer</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="nurse">Healthcare Professional</option>
+                            <option value="manager">Manager/Executive</option>
+                            <option value="sales">Sales Professional</option>
+                            <option value="entrepreneur">Entrepreneur</option>
+                            <option value="other">Other Professional</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="monthlyIncome">Monthly Income (after taxes)</label>
+                        <input type="number" id="monthlyIncomeInput" class="form-control" min="0" step="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="financialExperience">Financial Experience Level</label>
+                        <select id="financialExperience" class="form-control" required>
+                            <option value="">Select your experience</option>
+                            <option value="beginner">Beginner - Just starting out</option>
+                            <option value="intermediate">Intermediate - Some knowledge</option>
+                            <option value="advanced">Advanced - Experienced investor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="financialGoals">Primary Financial Goal</label>
+                        <select id="financialGoals" class="form-control" required>
+                            <option value="">Select your main goal</option>
+                            <option value="budgeting">Better budgeting and expense management</option>
+                            <option value="saving">Building an emergency fund</option>
+                            <option value="investing">Growing wealth through investing</option>
+                            <option value="debt">Paying off debt</option>
+                            <option value="retirement">Retirement planning</option>
+                            <option value="education">Saving for education</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--outline" id="cancelProfileBtn">Cancel</button>
+                <button type="submit" form="profileForm" class="btn btn--primary">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator hidden" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <span>Analyzing your finances...</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
